@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block menu_items %}
+    <li><a href="{{ url_for('games.create', game_id=1) }}">New</a></li>
+    <li><a href="{{ url_for('games.instructions', game_id=1) }}">How to Play Connect Four</a></li>
+    <li><a href="{{ url_for('games.home', game_id=1) }}">Sessions</a></li>
+{% endblock %}
+
+{% block content %}
+    <table style="width:50%">
+        <tr>
+            <td><b>Session ID</b></td>
+            <td><b>Number of Turns</b></td>
+        </tr>
+
+        {% for key, value in high_scores.items() %}
+            <tr>
+            {% for score, player in value %}
+            <tr>
+                <td> {{ player }} </td>
+                <td> {{ score }} </td>
+            </tr>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,14 @@
+.DS_Store
+pyarcade/.DS_Store
+database/.DS_Store
+pyarcade/__pycache__/
+*.pyc
+.idea/
+docs/build
+__pycache__/
+pyarcade/dynamodb/__pycache__/
+pyarcade/models/__pycache__/
+tests/__pycache__/
+htmlcov/
+.coverage
+venv/

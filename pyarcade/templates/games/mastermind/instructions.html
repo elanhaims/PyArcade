@@ -1,0 +1,33 @@
+{% extends 'games/mastermind/base.html' %}
+
+{% block menu_items %}
+  <li><a href="{{ url_for('games.create', game_id=0) }}">New</a></li>
+  <li><a href="{{ url_for('games.home', game_id=0) }}">Sessions</a></li>
+  <li><a href="{{ url_for('games.highscores', game_id=0) }}">High Scores</a></li>
+
+
+{% endblock %}
+
+{% block content %}
+  <h1 class="body">How to Play</h1>
+  <ol>
+      <li>The computer will generate a 4 digit secret number, ranging from 1-9. Duplicates are not allowed.</li>
+      <li>The player will then try to guess the computer's number who will then give the number of matches. If the
+      matching digits are in their right positions, they are "bulls". But if they are in different positions, they
+      are "cows".</li>
+  </ol> </br>
+  <h1 class="body">How to Win</h1>
+  <p>Reveal the computer's secret number in the fewest possible moves you can! The game is complete once the guess
+  contains 4 bulls and 0 cows.</p></br>
+  <h1 class="body">Example of Game Play</h1>
+  <ul>
+      <li>Secret number: 1234</li>
+      <li>Player's guess: 4731</li>
+      <li>Answer: 1 bull and 2 cows. The bull is the 3, while the cows are 1 and 4.</li>
+
+  </ul></br>
+  <h1 class="body">Instruction Video</h1>
+  <iframe width="800" height="450" src="https://www.youtube.com/embed/vq3Xyg3w6X8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </ul>
+
+{% endblock %}

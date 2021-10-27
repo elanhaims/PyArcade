@@ -1,0 +1,148 @@
+{% extends 'games/mancala/base.html' %}
+{% set user_id = g.user['username'] %}
+<script> console.log(game_session)</script>
+{% set board = game_session["board"] %}
+{% set status = game_session["status"] %}
+{% set game_session_id = game_session["session_id"] %}
+{% set next_player = game_session["next_player"] %}
+
+{% block menu_items %}
+  <li><a href="{{ url_for('games.home', game_id=2) }}">Sessions</a>
+  <li><a href="{{ url_for('games.instructions', game_id=2) }}">How to Play Mancala</a></li>
+{% endblock %}
+
+{% block content %}
+    <p class="body">Next player: {{ game_session["next_player"] }}</p>
+    {% if status %}
+      <h1>Game over, the winner is Player {{next_player}}</h1>
+    {% else %}
+      {% if next_player != user_id %}
+        <h1>Waiting for opponent's move</h1>
+        <a href="{{ url_for('games.view', game_id=2, game_session_id=game_session_id) }}">
+            <input type="button" name="Refresh" value="Refresh">
+        </a>
+      <div>
+      {% else %}
+        <div class="board">
+          <div class="section endsection">
+            <div class="pot_big" id="mb">
+            {% for _  in range(board[0][0])%}
+                    <span class="dot"></span>
+                  {% endfor%}
+            </div>
+          </div>
+          <div class="section midsection">
+            <div class="midrow topmid">
+              {% for i  in range(1,7)%}
+                  <div class="midrow topmid">
+                  <a href="{{ url_for('games.update_mancala',game_id=2, game_session_id=game_session_id,row=0,col=i,player_num=user_id)}}">
+                  <button class="pot" id="pt0{{i}}">
+                      {% for _  in range(0,board[0][i])%}
+                        <span class="dot"></span>
+                      {% endfor%}
+                  </button>
+                  </a>
+                  </div>
+              {% endfor%}
+            </div>
+            <div class="midrow botmid">
+              {% for i  in range(0,6)%}
+                  <div class="midrow botmid">
+                  <a href="{{ url_for('games.update_mancala',game_id=2, game_session_id=game_session_id,row=1,col=i,player_num=user_id)}}">
+                  <button class="pot" id="pb1{{i}}" >
+                      {% for _  in range(0,board[1][i])%}
+                        <span class="dot"></span>
+                      {% endfor%}
+                      </button>
+                  </a>
+                  </div>
+              {% endfor%}
+            </div>
+          </div>
+          <div class="section endsection">
+              <div class="pot_big" id="mt">
+              {% for i in range(0,board[1][6])%}
+                    <span class="dot"></span>
+                  {% endfor%}
+              </div>
+          </div>
+        </div>
+      {% endif%}
+    {% endif%}
+    <script>
+        function update_function_mancala(row, col,player_num){
+            row = Number(row);
+            col = Number(col);
+            player_num = Number(player_num)
+            window.location.href= "{{ url_for('games.update_mancala',game_id=2, game_session_id=game_session_id,row=0,col=0,player_num=0)}}".replace('/0/0/0','/'+row+'/'+col+'/'+player_num);
+        }
+    </script>
+    <style type="text/css">
+        .dot {
+          height: 5px;
+          width: 5px;
+          background-color: white;
+          border-radius: 100%;
+          display: inline-block;
+          line-break: auto;
+        }
+        .board
+        {
+          display:  flex;
+          background-color:SaddleBrown;
+          height:200px;
+          width:800px;
+          border-radius:50px;
+          padding:30px;
+          text-align:center;
+        }
+
+        .section
+        {
+          background-color:rgba(255, 255, 255, 0.03);
+          margin:5px;
+        }
+
+        .endsection
+        {
+          display:flex;
+          flex-grow:1;
+        }
+
+        .midsection
+        {
+          display:flex;
+          flex-direction:column;
+          flex-grow:6;
+        }
+
+        .midrow
+        {
+          display:flex;
+          flex-grow:1;
+        }
+
+
+        .pot {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.08);
+            flex-grow: 1;
+            margin: 5px;
+            border-radius: 50px;
+            height: 60px;
+            width: 50px;
+        }
+        .pot_big{
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.08);
+            flex-grow: 1;
+            margin: 5px;
+            border-radius: 50px;
+            height: 120px;
+            width: 90px;
+
+        }
+
+    </style>
+
+{% endblock %}

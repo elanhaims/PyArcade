@@ -1,0 +1,66 @@
+{% extends 'games/mastermind/base.html' %}
+
+{% block menu_items %}
+  <li><a href="{{ url_for('games.home', game_id=0) }}">Sessions</a>
+  <li><a href="{{ url_for('games.instructions', game_id=0) }}">How to Play Mastermind</a></li>
+{% endblock %}
+
+{% block content %}
+  <p class="body">Game session id: {{ game_session_id }}</p>
+{#    {% if session_data%}#}
+{#        <p> Session: {{session_data['guesses']}}</p>#}
+{#    {% endif %}#}
+  {% if session_data and session_data['done']%}
+      <p>Game over, You win!</p>
+  {% else %}
+      <input type="text" id="guess" ><button onClick="myFunction()">Test it</button>
+  {% endif %}
+  <p id="demo"></p>
+  <table class="table">
+    <thead>
+      <tr>
+{#        <th>#</th>#}
+        <th scope="col">Guess</th>
+        <th scope="col">Cows</th>
+        <th scope="col">Bulls</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if session_data %}
+        {% for each_session in session_data['guesses'] %}
+        <tr>
+{#          <th scope="row">{{ session_data[guesses] }}.length</th>#}
+          <th scope="row">{{each_session[0]}}</th>
+          <td>{{each_session[1][0]}}</td>
+          <td>{{each_session[1][1]}}</td>
+        </tr>
+        {% endfor%}
+      {% endif %}
+    </tbody>
+  </table>
+
+  <script>
+    function myFunction() {
+      var userGuess = document.getElementById("guess").value;
+      var input_proxy;
+      var output_tuple;
+      try{
+        input_proxy = eval(userGuess);
+      }catch (e){
+        alert("Please enter 4 number digits");
+      }
+      if (userGuess.length != 4){
+        alert("Please enter 4 number digits");
+      }else{
+        output_tuple=[parseInt(userGuess[0]),parseInt(userGuess[1]),parseInt(userGuess[2]),parseInt(userGuess[3])];
+        document.getElementById("demo").innerHTML = output_tuple;
+      }
+      console.log(output_tuple);
+      window.location.href= "{{ url_for('games.update_mastermind',game_id=0, game_session_id=game_session_id,guess_one=9,guess_two=9,guess_three=9,guess_four=9)}}".replace('9/9/9/9',output_tuple[0]+'/'+output_tuple[1]+'/'+output_tuple[2]+'/'+output_tuple[3]+'/') ;
+
+
+     }
+  </script>
+
+{% endblock %}
+

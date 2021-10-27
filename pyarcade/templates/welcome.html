@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h2>{% block title %}Welcome to PyArcade{% endblock %}</h2>
+{% endblock %}
+
+{% block content %}
+    <h3>Select a game to play from the following options</h3>
+    <ul>
+        <li><a href="{{ url_for('games.home', game_id=0) }}">Mastermind</a>
+        <li><a href="{{ url_for('games.home', game_id=1) }}">Connect 4</a>
+        <li><a href="{{ url_for('games.home', game_id=2) }}">Mancala</a>
+    </ul>
+{% endblock %}

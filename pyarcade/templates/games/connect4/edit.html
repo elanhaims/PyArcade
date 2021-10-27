@@ -1,0 +1,562 @@
+{% extends 'games/connect4/base.html' %}
+{% set game_session_id = game_session["session_id"] %}
+{% set game_session_id = game_session["session_id"] %}
+{% set game_session_id = game_session["session_id"] %}
+{% block menu_items %}
+<li><a href="{{ url_for('games.home', game_id=1) }}">Sessions </a></li>
+    <li><a href="{{ url_for('games.instructions', game_id=1) }}">How to Play Connect Four</a></li>
+{% endblock %}
+
+{% block content %}
+  <style type="text/css">
+    .board button {
+      display: block;
+      background-color: red;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 0;
+      margin: 1px;
+      background: #bbb;
+    }
+    .board button:hover {
+      filter: brightness(75%);
+    }
+    #board{
+      background-color:white
+    }
+    .regularContent {
+          font-family: serif;
+          color: #377ba8;
+          margin: 1rem 0;
+    }
+
+  </style>
+  <script>
+        var colorOne;
+        var colorTwo;
+        window.addEventListener("load", startup, false);
+        function startup() {
+          colorOne = document.querySelector(".playerOneColor");
+          colorTwo = document.querySelector(".playerTwoColor");
+          colorOne.addEventListener("input", updateOne, false);
+          colorTwo.addEventListener("input", updateTwo, false);
+        }
+        function updateOne(event) {
+          var player1 = document.querySelectorAll(".player1");
+          player1.forEach((button)=>{
+              button.style.backgroundColor =event.target.value;
+          })
+        }
+        function updateTwo(event) {
+          var player2 = document.querySelectorAll(".player2");
+          player2.forEach((button)=>{
+              button.style.backgroundColor =event.target.value;
+          })
+        }
+
+  </script>
+
+  <p class="regularContent">
+      <h3>Game session id: {{ game_session_id }}</h3>
+
+      <div>
+    {% if game_session['status'] == true or game_session["player_num"] == "3" %}
+            {% if game_session['player_num'] == "3" %}
+                <h1 class = "regularContent">Game Over and it is a Draw</h1>
+            {% else %}
+              <h1 class="regularContent">Game Over and the winner is {{ game_session['player_num'] }}</h1>
+            {% endif %}
+
+    {% else %}
+      {% if game_session['player_num'] == game_session['user_id'] %}
+        <div>
+    <h2 class="primary">
+      <span id="prefix">Current player is: </span>
+      <span id="current-player" contenteditable="true">{{ game_session['user_id'] }}</span>
+      <input type="color" value="#e66465" class="playerOneColor">
+    </h2>
+    <h3 class="secondary">
+      <span>Next up is: </span>
+      <span id="other-player" contenteditable="true">{{ game_session['opponent_id'] }} </span>
+      <input type="color" value="#000000" class="playerTwoColor">
+    </h3>
+      </div>
+
+      {% else %}
+        <div>
+      <h2 class="secondary">
+      <span id="prefix2">Current player is: </span>
+      <span id="current-player2" contenteditable="true">{{ game_session['opponent_id'] }} </span>
+      <input type="color" value="#000000" class="playerOneColor">
+    </h2>
+    <h3 class="primary">
+      <span>Next up is: </span>
+      <span id="other-player2" contenteditable="true">{{ game_session['user_id'] }} </span>
+      <input type="color" value="#e66465" class="playerTwoColor">
+    </h3>
+  </div>
+      {% endif %}
+      {% endif %}
+      </div>
+
+
+  <table id="board" class="board">
+    <tbody>
+<tr>
+
+
+
+
+        {% if game_session['board'][0][0] == game_session['user_id']     %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][0] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+
+        {% if game_session['board'][0][1] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][1] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][0][2] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][2] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][0][3] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][3] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+
+        {% if game_session['board'][0][4] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][4] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+
+        {% if game_session['board'][0][5] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][5] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+
+        {% if game_session['board'][0][6] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][0][6] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+      </tr>
+      <tr>
+        {% if game_session['board'][1][0] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][0] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][1][1] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][1] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][1][2] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][2] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][1][3] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][3] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][1][4] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][4] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][1][5] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][5] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][1][6] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][1][6] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+      </tr>
+      <tr>
+        {% if game_session['board'][2][0] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][0] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][2][1] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][1] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][2][2] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][2] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][2][3] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][3] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][2][4] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][4] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][2][5] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][5] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][2][6] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][2][6] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+      </tr>
+      <tr>
+        {% if game_session['board'][3][0] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][0] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][3][1] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][1] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][3][2] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][2] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][3][3] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][3] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][3][4] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][4] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][3][5] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][5] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][3][6] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][3][6] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+      </tr>
+      <tr>
+        {% if game_session['board'][4][0] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][0] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][4][1] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][1] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][4][2] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][2] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][4][3] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][3] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][4][4] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][4] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][4][5] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][5] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][4][6] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][4][6] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+      </tr>
+      <tr>
+        {% if game_session['board'][5][0] == game_session['user_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][0] == game_session['opponent_id']    %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=1) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][5][1] == game_session['user_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][1] == game_session['opponent_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=2) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][5][2] == game_session['user_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][2] == game_session['opponent_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=3) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][5][3] == game_session['user_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][3] == game_session['opponent_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=4) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][5][4] == game_session['user_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][4] == game_session['opponent_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=5) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][5][5] == game_session['user_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][5] == game_session['opponent_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=6) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+
+  <!--///////////////////////////////////////////////////// -->
+
+        {% if game_session['board'][5][6] == game_session['user_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:red" onclick="this.disabled=true" class="player1"></button></a></td>
+        {% elif game_session['board'][5][6] == game_session['opponent_id']  %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" style="background-color:black" onclick="this.disabled=true" class="player2"></button></a></td>
+        {% else %}
+        <td><a href="{{ url_for('games.update', game_id=1, game_session_id=game_session_id, player_num=game_session['player_num'], column=7) }}"><button type="button" onclick="this.disabled=true"></button></a></td>
+        {% endif %}
+
+  <!--///////////////////////////////////////////////////// -->
+      </tr>
+    </tbody>
+  </table>
+
+
+
+{% endblock %}

@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  db:
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+    image: "amazon/dynamodb-local:latest"
+    hostname: "dynamodb-local"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "dynamodb-data:/home/dynamodblocal"
+    working_dir: "/home/dynamodblocal"
+    networks:
+      - pyarcade-nw
+    env_file:
+      - '.env'
+      
+  web:
+    build: .
+    depends_on:
+      - 'db'
+    image: pyarcade:1.0
+    ports:
+      - "5000:5000"
+    networks:
+      - pyarcade-nw
+    env_file:
+      - '.env'
+
+volumes:
+  dynamodb-data: 
+
+networks:
+  pyarcade-nw:

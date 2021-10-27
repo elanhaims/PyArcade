@@ -1,0 +1,38 @@
+{% extends 'games/mancala/base.html' %}
+
+{% block menu_items %}
+  <li><a href="{{ url_for('games.new', game_id=game_id) }}">New</a></li>
+  <li><a href="{{ url_for('games.highscores', game_id=game_id) }}">High Scores</a></li>
+  <li><a href="{{ url_for('games.instructions', game_id=game_id) }}">How to Play Mancala</a></li>
+{% endblock %}
+
+{% block content %}
+  Lets play Mancala! <br></br>
+
+  <p><a href="{{ url_for('games.home', game_id=game_id) }}">Refresh Sessions</a></p>
+
+  <b>Your Game sessions: </b></br></br>
+  {% for game_session_id in game_sessions %}
+    {% set gs = game_session_id["session_id"] %}
+    {{ gs }}
+    <a class="action" href="{{ url_for('games.view', game_id=game_id, game_session_id=gs) }}">Resume</a>
+    <a class="action" href="{{ url_for('games.remove', game_id=game_id, game_session_id=gs) }}">Delete</a>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+
+  </p>
+  </br>
+  <b>Your Game Invites: </b></br></br>
+  {% for game_session_id in game_invites %}
+    {% set gs = game_session_id["session_id"] %}
+    {{ gs }}
+    <a class="action" href="{{ url_for('games.view', game_id=game_id, game_session_id=gs) }}">Resume</a>
+    <a class="action" href="{{ url_for('games.remove', game_id=game_id, game_session_id=gs) }}">Delete</a>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+
+{% endblock %}

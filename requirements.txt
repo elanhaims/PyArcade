@@ -1,0 +1,6 @@
+Flask==1.1.2
+boto3==1.17.58
+configparser==3.5.0
+requests
+simplejson
+python-dotenv

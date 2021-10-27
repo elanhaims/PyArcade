@@ -1,0 +1,37 @@
+{% extends 'games/mancala/base.html' %}
+
+{% block menu_items %}
+  <li><a href="{{ url_for('games.create', game_id=2) }}">New</a></li>
+
+  <li><a href="{{ url_for('games.highscores', game_id=2) }}">High Scores</a></li>
+
+  <li><a href="{{ url_for('games.home', game_id=2) }}">Sessions</a></li>
+{% endblock %}
+
+{% block content %}
+  <h1 class="body">How to Play</h1>
+  <ol>
+    <li>Decide who plays first. Players will alternate turns with Player 1 first (the one sending the game invite) and
+      Player 2 next (the one receiving an invite). </br></li>
+    <li>The larger pockets are called stores or your own Mancala. Each player has one of their own. Player 1 (the one
+      sending the request) has the store on the righthand side, while Player 2 (the one receiving game invite) will get
+      the store on the lefthand side.</li>
+    <li>On your turn, pick up all of the pieces in any one of the 12 (twelve) pockets by clicking on the pocket that
+      you would like to distribute.</li>
+    <li>The pieces will be distributed one by one along each of the 12 pockets counter-clockwise. If you reach your own
+    store, a piece will be placed inside. If you reach your opponent's store, you will move onto the next pocket
+      instead.</li>
+    <li>If the last piece you drop is in your own Mancala, you get to take another turn.</li>
+    <li>If the last piece you drop in is in an empty pocket, you get to retrieve that piece and all the pieces in
+    the opposite pocket.</li>
+    <li>All captured pieces will be in your Mancala.</li>
+    <li>The game ends when all six pockets on one side of the Mancala board is empty.</li>
+    <li>The player who has pieces on his/her side of the board (Player 1 owns bottom 6 pockets, Player 2 owns top 6
+      pockets) when the game ends also captures those pieces.</li>
+    <li>Count all the pieces Player 1 and Player 2 own.</li>
+  </ol> </br>
+  <h1 class="body">How to Win</h1>
+  <p>If you are the player with more pieces than your opponent at the end of the game, you win!</p> </br>
+  <h1 class="body">Instruction Video</h1>
+  <iframe width="800" height="450" src="https://www.youtube.com/embed/UDlw7jFhwr0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{% endblock %}

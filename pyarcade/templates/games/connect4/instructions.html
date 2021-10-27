@@ -1,0 +1,24 @@
+{% extends 'games/connect4/base.html' %}
+
+{% block menu_items %}
+  <li><a href="{{ url_for('games.create', game_id=1) }}">New</a></li>
+
+  <li><a href="{{ url_for('games.highscores', game_id=1) }}">High Scores</a></li>
+
+  <li><a href="{{ url_for('games.home', game_id=1) }}">Sessions</a></li>
+{% endblock %}
+
+{% block content %}
+  <h1 class="body">How to Play</h1>
+  <ol>
+    <li>Decide who plays first. Players will alternate turns after playing with a checker. </br>
+    NOTE: The player starting the first game will play second in the next game.</li>
+    <li>On your turn, drop one of your checkers down ANY of the slots in the top of the grid.</li>
+    <li>Play alternately until one player gets FOUR checkers of his or her color in a row. The four in a row can be
+    horizontal, vertical, or diagonal.</li>
+  </ol> </br>
+  <h1 class="body">How to Win</h1>
+  <p>If you are the first player to get four of your checkers in a row, you win the game!</p> </br>
+  <h1 class="body">Instruction Video</h1>
+  <iframe width="800" height="450" src="https://www.youtube.com/embed/mlB9a40FxwI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{% endblock %}
